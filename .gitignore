@@ -5,5 +5,5 @@
 build/
 
 # Python-specific
-.venv
+venv
 **/__pycache__
