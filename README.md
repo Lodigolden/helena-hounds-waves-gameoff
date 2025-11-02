@@ -25,6 +25,11 @@ By maintaining a requirements.txt file, it's very easy for other developers to p
 **Pulling in Packages**
 > pip install -r requirements.txt
 
+## Running
+From root directory, run the following command:
+
+> python -m main
+
 ## Linting
 Linting is important because it keeps code consistent and easier to read. After pulling in the packages from the requirements.txt file, you can use Black to automatically lint code.
 
