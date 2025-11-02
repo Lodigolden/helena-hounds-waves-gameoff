@@ -10,7 +10,7 @@ import pygame_menu
 
 
 # --------------------------------------------------------------------------------------------------
-class Menu:
+class Menu(pygame_menu.Menu):
     """
     A menu wrapper for the game.
     """
@@ -26,15 +26,14 @@ class Menu:
         """
 
         self.wn = wn
-
-        self.menu = pygame_menu.Menu(
+        super().__init__(
             "Welcome",
             display_size[0],
             display_size[1],
             theme=pygame_menu.themes.THEME_BLUE,
         )
 
-        self.menu.add.text_input("Name: ", default="John Doe")
+        self.add.button("Play", self.disable)
 
     # ----------------------------------------------------------------------------------------------
     def display(self):
@@ -42,4 +41,4 @@ class Menu:
         Displays the menu.
         """
 
-        self.menu.mainloop(self.wn)
+        self.mainloop(self.wn)

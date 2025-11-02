@@ -5,7 +5,7 @@
 # --------------------------------------------------------------------------------------------------
 # Include(s)
 # --------------------------------------------------------------------------------------------------
-from src.components.menu import Menu
+from components.menu import Menu
 
 import pygame
 
@@ -26,20 +26,24 @@ class Game_loop:
             fps (int): Window refresh rate.
         """
 
+        # Configuration variables.
         self.display_size = display_size
         self.fps = fps
         self.running = True
+
+        # Child initialization.
+        pygame.init()
+        self.wn = pygame.display.set_mode(self.display_size)
+        self.clock = pygame.time.Clock()
+        self.menu = Menu(self.display_size, self.wn)
+
+        self.menu.enable()
 
     # ----------------------------------------------------------------------------------------------
     def run(self):
         """
         Runs the main game loop.
         """
-
-        pygame.init()
-        self.wn = pygame.display.set_mode(self.display_size)
-        self.clock = pygame.time.Clock()
-        self.menu = Menu(self.display_size, self.wn)
 
         while self.running:
             self.handle_events()
@@ -64,8 +68,10 @@ class Game_loop:
         Updates the game.
         """
 
-        self.menu.display()
-        self.wn.fill("purple")
+        if self.menu.is_enabled():
+            self.menu.display()
+        else:
+            self.wn.fill("purple")
 
     # ----------------------------------------------------------------------------------------------
     def render(self):

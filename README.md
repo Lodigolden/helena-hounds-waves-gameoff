@@ -26,7 +26,7 @@ By maintaining a requirements.txt file, it's very easy for other developers to p
 > pip install -r requirements.txt
 
 ## Running
-From root directory, run the following command:
+From src/ directory, run the following command:
 
 > python -m main
 
