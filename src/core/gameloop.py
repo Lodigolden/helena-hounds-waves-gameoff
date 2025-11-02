@@ -5,11 +5,17 @@
 # --------------------------------------------------------------------------------------------------
 # Include(s)
 # --------------------------------------------------------------------------------------------------
+from src.components.menu import Menu
+
 import pygame
 
 
 # --------------------------------------------------------------------------------------------------
 class Game_loop:
+    """
+    A wrapper class to handle the main game loop.
+    """
+
     # ----------------------------------------------------------------------------------------------
     def __init__(self, display_size, fps):
         """
@@ -29,9 +35,11 @@ class Game_loop:
         """
         Runs the main game loop.
         """
+
         pygame.init()
         self.wn = pygame.display.set_mode(self.display_size)
         self.clock = pygame.time.Clock()
+        self.menu = Menu(self.display_size, self.wn)
 
         while self.running:
             self.handle_events()
@@ -56,6 +64,7 @@ class Game_loop:
         Updates the game.
         """
 
+        self.menu.display()
         self.wn.fill("purple")
 
     # ----------------------------------------------------------------------------------------------
