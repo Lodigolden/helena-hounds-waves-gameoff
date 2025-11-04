@@ -6,7 +6,7 @@
 # Include(s)
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
-from components.pirate import Pirate
+from components.pirate import Pirate, Player
 from components.ship import Ship
 from components.island import Island, Home_island
 from core.states import Game_state
@@ -47,6 +47,7 @@ class Game_loop:
         self.menu = Menu(self.display_size, self.wn, self)
         self.keys = pygame.key.get_pressed()
 
+        # Screen backgrounds:
         self.map_background = fetch_asset(
             os.path.join(current_dir, "assets", "backgrounds", "water.png")
         )
@@ -54,6 +55,7 @@ class Game_loop:
             os.path.join(current_dir, "assets", "backgrounds", "home.png")
         )
 
+        # Components:
         self.ship = Ship(
             self,
             self.wn.get_width() / 2,
@@ -76,7 +78,8 @@ class Game_loop:
             Home_island(self, 3 * self.wn.get_width() / 4, self.wn.get_height() / 4)
         )
 
-        self.pirate = Pirate(
+        # Characters:
+        self.player = Player(
             self, self.wn.get_width() / 10, 3 * self.wn.get_height() / 3
         )
 
@@ -164,8 +167,8 @@ class Game_loop:
                 abs(self.ship.pos.y - island.pos.y) < 30
             ):
                 if island.is_home:
-                    self.pirate.pos.x = self.wn.get_width() / 10
-                    self.pirate.pos.y = 2 * self.wn.get_height() / 3
+                    self.player.pos.x = self.wn.get_width() / 10
+                    self.player.pos.y = 2 * self.wn.get_height() / 3
                     self.game_state = Game_state.GAME_HOME_STATE
                 else:
                     self.game_state = Game_state.GAME_PLATFORMER_STATE
@@ -185,9 +188,9 @@ class Game_loop:
         """
 
         self.wn.blit(self.home_background, (0, 0))
-        self.pirate.render()
+        self.player.render()
 
         # Return to map.
-        if self.pirate.pos.x < 0:
+        if self.player.pos.x < 0:
             self.ship.pos.x -= 50
             self.game_state = Game_state.GAME_MAP_STATE
