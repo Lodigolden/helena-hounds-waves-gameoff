@@ -6,18 +6,9 @@
 # Include(s)
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
+from core.states import Game_state
 
-from enum import Enum
 import pygame
-
-# --------------------------------------------------------------------------------------------------
-
-class Game_state(Enum):
-    """
-    Enum class for game states.
-    """
-    MENU_STATE = 0
-
 
 # --------------------------------------------------------------------------------------------------
 class Game_loop:
@@ -39,13 +30,13 @@ class Game_loop:
         self.display_size = display_size
         self.fps = fps
         self.running = True
-        game_state = Game_state.MENU_STATE
+        self.game_state = Game_state.MENU_STATE
 
         # Child initialization.
         pygame.init()
         self.wn = pygame.display.set_mode(self.display_size)
         self.clock = pygame.time.Clock()
-        self.menu = Menu(self.display_size, self.wn)
+        self.menu = Menu(self.display_size, self.wn, self)
 
         self.menu.enable()
 
@@ -78,10 +69,11 @@ class Game_loop:
         Updates the game.
         """
 
-        if self.menu.is_enabled():
-            self.menu.display()
-        else:
-            self.wn.fill("purple")
+        match self.game_state:
+            case Game_state.MENU_STATE:
+                self.handle_menu_state()
+            case _:
+                self.wn.fill("purple")
 
     # ----------------------------------------------------------------------------------------------
     def render(self):
@@ -91,3 +83,14 @@ class Game_loop:
 
         pygame.display.flip()
         self.clock.tick(self.fps)
+
+    # ----------------------------------------------------------------------------------------------
+    def handle_menu_state(self):
+        """
+        State for the menu.
+        """
+
+        print(self.game_state)
+
+        if self.game_state == Game_state.MENU_STATE:
+            self.menu.display()
