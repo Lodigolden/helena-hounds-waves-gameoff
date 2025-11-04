@@ -6,9 +6,11 @@
 # Include(s)
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
+from components.ship import Ship
 from core.states import Game_state
 
 import pygame
+
 
 # --------------------------------------------------------------------------------------------------
 class Game_loop:
@@ -37,8 +39,11 @@ class Game_loop:
         self.wn = pygame.display.set_mode(self.display_size)
         self.clock = pygame.time.Clock()
         self.menu = Menu(self.display_size, self.wn, self)
-
-        self.ball_pos = pygame.Vector2(self.wn.get_width() / 2, self.wn.get_height() / 2)
+        self.keys = pygame.key.get_pressed()
+        
+        self.ship = Ship(self)
+        self.ship.pos.x = self.wn.get_width() / 2
+        self.ship.pos.y = self.wn.get_height() / 2
 
         self.menu.enable()
 
@@ -61,10 +66,15 @@ class Game_loop:
         Handles user inputs / game events.
         """
 
+        # Look for special events:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
 
+        # Get keys pressed by user:
+        self.keys = pygame.key.get_pressed()
+
+        # Update clock tick:
         self.dt = self.clock.tick(60) / 1000
 
     # ----------------------------------------------------------------------------------------------
@@ -105,16 +115,5 @@ class Game_loop:
         State for playing the game.
         """
 
-        self.wn.fill("purple")
-
-        pygame.draw.circle(self.wn, "red", self.ball_pos, 40)
-
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
-            self.ball_pos.y -= 300 * self.dt
-        if keys[pygame.K_s]:
-            self.ball_pos.y += 300 * self.dt
-        if keys[pygame.K_a]:
-            self.ball_pos.x -= 300 * self.dt
-        if keys[pygame.K_d]:
-            self.ball_pos.x += 300 * self.dt
+        self.wn.fill("blue")
+        self.ship.render()

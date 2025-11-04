@@ -14,5 +14,5 @@ class Game_state(Enum):
     Enum class for game states.
     """
 
-    MENU_STATE = 0,
-    GAME_STATE = 1,
+    MENU_STATE = (0,)
+    GAME_STATE = (1,)

@@ -9,6 +9,7 @@ from core.states import Game_state
 
 import pygame_menu
 
+
 # --------------------------------------------------------------------------------------------------
 class Menu(pygame_menu.Menu):
     """
@@ -30,7 +31,7 @@ class Menu(pygame_menu.Menu):
         self.game_loop = game_loop
 
         super().__init__(
-            "Welcome",
+            "Waves",
             display_size[0],
             display_size[1],
             theme=pygame_menu.themes.THEME_BLUE,
@@ -44,7 +45,7 @@ class Menu(pygame_menu.Menu):
         Displays the menu.
         """
 
-        if (self.game_loop.game_state == Game_state.MENU_STATE):
+        if self.game_loop.game_state == Game_state.MENU_STATE:
             self.mainloop(self.wn)
 
     # ----------------------------------------------------------------------------------------------
