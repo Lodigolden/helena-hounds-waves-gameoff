@@ -7,7 +7,16 @@
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
 
+from enum import Enum
 import pygame
+
+# --------------------------------------------------------------------------------------------------
+
+class Game_state(Enum):
+    """
+    Enum class for game states.
+    """
+    MENU_STATE = 0
 
 
 # --------------------------------------------------------------------------------------------------
@@ -30,6 +39,7 @@ class Game_loop:
         self.display_size = display_size
         self.fps = fps
         self.running = True
+        game_state = Game_state.MENU_STATE
 
         # Child initialization.
         pygame.init()

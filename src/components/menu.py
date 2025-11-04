@@ -18,7 +18,7 @@ class Menu(pygame_menu.Menu):
     # ----------------------------------------------------------------------------------------------
     def __init__(self, display_size, wn):
         """
-        Default constructor.
+        Parameterized constructor sets the display size and references the window.
 
         Args:
             display_size (tuple of ints): Size of the game window.
