@@ -54,5 +54,5 @@ class Menu(pygame_menu.Menu):
         Handles when the user clicks the "Play" button.
         """
 
-        self.game_loop.game_state = Game_state.GAME_STATE
+        self.game_loop.game_state = Game_state.GAME_MAP_STATE
         self.disable()

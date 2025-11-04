@@ -7,8 +7,10 @@
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
 from components.ship import Ship
+from components.island import Island, Home_island
 from core.states import Game_state
 
+import os
 import pygame
 
 
@@ -28,6 +30,8 @@ class Game_loop:
             fps (int): Window refresh rate.
         """
 
+        current_dir = os.getcwd()
+
         # Configuration variables.
         self.display_size = display_size
         self.fps = fps
@@ -40,10 +44,30 @@ class Game_loop:
         self.clock = pygame.time.Clock()
         self.menu = Menu(self.display_size, self.wn, self)
         self.keys = pygame.key.get_pressed()
-        
-        self.ship = Ship(self)
-        self.ship.pos.x = self.wn.get_width() / 2
-        self.ship.pos.y = self.wn.get_height() / 2
+
+        self.ship = Ship(
+            self,
+            self.wn.get_width() / 2,
+            self.wn.get_height() / 2,
+            os.path.join(current_dir, "assets", "ships", "player_ship.png"),
+        )
+
+        # All Islands:
+        self.islands = []
+        self.islands.append(
+            Island(self, self.wn.get_width() / 4, self.wn.get_height() / 4)
+        )
+        self.islands.append(
+            Island(self, 3 * self.wn.get_width() / 4, 3 * self.wn.get_height() / 4)
+        )
+        self.islands.append(
+            Island(self, self.wn.get_width() / 4, 3 * self.wn.get_height() / 4)
+        )
+        self.islands.append(
+            Home_island(self, 3 * self.wn.get_width() / 4, self.wn.get_height() / 4)
+        )
+
+        # self.home_island = Home_island(self, 3 * self.wn.get_width() / 4, self.wn.get_height() / 4)
 
         self.menu.enable()
 
@@ -86,8 +110,12 @@ class Game_loop:
         match self.game_state:
             case Game_state.MENU_STATE:
                 self.handle_menu_state()
-            case Game_state.GAME_STATE:
-                self.handle_game_state()
+            case Game_state.GAME_MAP_STATE:
+                self.handle_game_map_state()
+            case Game_state.GAME_PLATFORMER_STATE:
+                self.handle_game_platformer_state()
+            case Game_state.GAME_HOME_STATE:
+                self.handle_home_state()
             case _:
                 self.wn.fill("purple")
 
@@ -110,10 +138,45 @@ class Game_loop:
             self.menu.display()
 
     # ----------------------------------------------------------------------------------------------
-    def handle_game_state(self):
+    def handle_game_map_state(self):
         """
-        State for playing the game.
+        State for the main map.
         """
 
         self.wn.fill("blue")
         self.ship.render()
+
+        for island in self.islands:
+            island.render()
+
+            if (abs(self.ship.pos.x - island.pos.x) < 20) and (
+                abs(self.ship.pos.y - island.pos.y) < 20
+            ):
+                if island.is_home:
+                    self.game_state = Game_state.GAME_HOME_STATE
+                else:
+                    self.game_state = Game_state.GAME_PLATFORMER_STATE
+
+        # self.home_island.render()
+        # if (abs(self.ship.pos.x - self.home_island.pos.x) < 20) and (
+        #         abs(self.ship.pos.y - self.home_island.pos.y) < 20
+        #     ):
+        #         self.game_state = Game_state.GAME_HOME_STATE
+
+    # ----------------------------------------------------------------------------------------------
+    def handle_game_platformer_state(self):
+        """
+        State for a platformer level.
+        """
+
+        self.wn.fill("black")
+
+    # ----------------------------------------------------------------------------------------------
+    def handle_home_state(self):
+        """
+        State for the home base.
+        """
+
+        self.wn.fill("white")
+
+        pass
