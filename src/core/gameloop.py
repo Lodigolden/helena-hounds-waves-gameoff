@@ -6,9 +6,11 @@
 # Include(s)
 # --------------------------------------------------------------------------------------------------
 from components.menu import Menu
+from components.pirate import Pirate
 from components.ship import Ship
 from components.island import Island, Home_island
 from core.states import Game_state
+from core.utils import fetch_asset
 
 import os
 import pygame
@@ -45,6 +47,13 @@ class Game_loop:
         self.menu = Menu(self.display_size, self.wn, self)
         self.keys = pygame.key.get_pressed()
 
+        self.map_background = fetch_asset(
+            os.path.join(current_dir, "assets", "backgrounds", "water.png")
+        )
+        self.home_background = fetch_asset(
+            os.path.join(current_dir, "assets", "backgrounds", "home.png")
+        )
+
         self.ship = Ship(
             self,
             self.wn.get_width() / 2,
@@ -67,7 +76,9 @@ class Game_loop:
             Home_island(self, 3 * self.wn.get_width() / 4, self.wn.get_height() / 4)
         )
 
-        # self.home_island = Home_island(self, 3 * self.wn.get_width() / 4, self.wn.get_height() / 4)
+        self.pirate = Pirate(
+            self, self.wn.get_width() / 10, 3 * self.wn.get_height() / 3
+        )
 
         self.menu.enable()
 
@@ -143,25 +154,21 @@ class Game_loop:
         State for the main map.
         """
 
-        self.wn.fill("blue")
+        self.wn.blit(self.map_background, (0, 0))
         self.ship.render()
 
         for island in self.islands:
             island.render()
 
-            if (abs(self.ship.pos.x - island.pos.x) < 20) and (
-                abs(self.ship.pos.y - island.pos.y) < 20
+            if (abs(self.ship.pos.x - island.pos.x) < 30) and (
+                abs(self.ship.pos.y - island.pos.y) < 30
             ):
                 if island.is_home:
+                    self.pirate.pos.x = self.wn.get_width() / 10
+                    self.pirate.pos.y = 2 * self.wn.get_height() / 3
                     self.game_state = Game_state.GAME_HOME_STATE
                 else:
                     self.game_state = Game_state.GAME_PLATFORMER_STATE
-
-        # self.home_island.render()
-        # if (abs(self.ship.pos.x - self.home_island.pos.x) < 20) and (
-        #         abs(self.ship.pos.y - self.home_island.pos.y) < 20
-        #     ):
-        #         self.game_state = Game_state.GAME_HOME_STATE
 
     # ----------------------------------------------------------------------------------------------
     def handle_game_platformer_state(self):
@@ -177,6 +184,10 @@ class Game_loop:
         State for the home base.
         """
 
-        self.wn.fill("white")
+        self.wn.blit(self.home_background, (0, 0))
+        self.pirate.render()
 
-        pass
+        # Return to map.
+        if self.pirate.pos.x < 0:
+            self.ship.pos.x -= 50
+            self.game_state = Game_state.GAME_MAP_STATE

@@ -5,6 +5,8 @@
 # --------------------------------------------------------------------------------------------------
 # Include(s)
 # --------------------------------------------------------------------------------------------------
+from core.utils import fetch_asset
+
 import os
 import pygame
 
@@ -30,17 +32,8 @@ class Ship:
         self.pos = pygame.Vector2(x_pos, y_pos)
         self.game_loop = game_loop
         self.angle = 0
-        
-        try:
-            ship_surface = pygame.image.load(asset_path)
-        except pygame.error as message:
-            print(f"Cannot load image: { asset_path }")
-            raise SystemExit(message)
 
-        if ship_surface.get_alpha() is not None:
-            self.ship_surface = ship_surface.convert_alpha()
-        else:
-            self.ship_surface = ship_surface.convert()
+        self.ship_surface = fetch_asset(asset_path)
 
     # ----------------------------------------------------------------------------------------------
     def render(self):

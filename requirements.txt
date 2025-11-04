@@ -1,5 +1,6 @@
 black==25.9.0
 click==8.3.0
+-e git+https://github.com/Lodigolden/helena-hounds-waves-gameoff.git@bedc1e28b65f118fd34dc451fe3a9526c95c0da4#egg=helena_hounds_waves_gameoff
 mypy_extensions==1.1.0
 packaging==25.0
 pathspec==0.12.1

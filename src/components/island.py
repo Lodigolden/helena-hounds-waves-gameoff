@@ -23,6 +23,7 @@ class Island:
             game_loop (Game_loop): Reference to the main game loop object.
             x_pos (int): Ship x-position.
             y_pos (int): Ship y-position.
+            assest_path (path): Location to asset.
         """
 
         self.pos = pygame.Vector2(x_pos, y_pos)
