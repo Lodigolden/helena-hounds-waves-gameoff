@@ -38,6 +38,8 @@ class Game_loop:
         self.clock = pygame.time.Clock()
         self.menu = Menu(self.display_size, self.wn, self)
 
+        self.ball_pos = pygame.Vector2(self.wn.get_width() / 2, self.wn.get_height() / 2)
+
         self.menu.enable()
 
     # ----------------------------------------------------------------------------------------------
@@ -63,6 +65,8 @@ class Game_loop:
             if event.type == pygame.QUIT:
                 self.running = False
 
+        self.dt = self.clock.tick(60) / 1000
+
     # ----------------------------------------------------------------------------------------------
     def update(self):
         """
@@ -72,6 +76,8 @@ class Game_loop:
         match self.game_state:
             case Game_state.MENU_STATE:
                 self.handle_menu_state()
+            case Game_state.GAME_STATE:
+                self.handle_game_state()
             case _:
                 self.wn.fill("purple")
 
@@ -90,7 +96,25 @@ class Game_loop:
         State for the menu.
         """
 
-        print(self.game_state)
-
         if self.game_state == Game_state.MENU_STATE:
             self.menu.display()
+
+    # ----------------------------------------------------------------------------------------------
+    def handle_game_state(self):
+        """
+        State for playing the game.
+        """
+
+        self.wn.fill("purple")
+
+        pygame.draw.circle(self.wn, "red", self.ball_pos, 40)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            self.ball_pos.y -= 300 * self.dt
+        if keys[pygame.K_s]:
+            self.ball_pos.y += 300 * self.dt
+        if keys[pygame.K_a]:
+            self.ball_pos.x -= 300 * self.dt
+        if keys[pygame.K_d]:
+            self.ball_pos.x += 300 * self.dt
